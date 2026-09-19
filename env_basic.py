@@ -1,0 +1,4 @@
+MY_API_KEY=from_env_file
+GITHUB_USERNAME=octocat
+MIN_STARS=500
+LANGUAGE=Ruby
