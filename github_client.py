@@ -126,6 +126,8 @@ def main():
             repo["language"]
         )
 
+        # Git practice: second commit
+        
 
 if __name__ == "__main__":
     main()
