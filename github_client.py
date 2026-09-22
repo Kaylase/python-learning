@@ -51,6 +51,18 @@ def print_summary(repos, filtered):
     print("Repositories after filtering:", len(filtered))
 
 
+def calculate_average_stars(filtered):
+    if len(filtered) == 0:
+        return 0
+
+    total_stars = 0
+
+    for repo in filtered:
+        total_stars += repo["stargazers_count"]
+
+    return total_stars / len(filtered)
+
+
 def simplify_repos(repos):
     simplified = []
 
@@ -116,6 +128,8 @@ def main():
     )
 
     print_summary(repos, filtered)
+    average_stars = calculate_average_stars(filtered)
+    print("Average stars:", average_stars)
 
     simplified = simplify_repos(filtered)
 
