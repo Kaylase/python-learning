@@ -46,6 +46,11 @@ def filter_repos(repos, min_stars, language=None):
     return filtered
 
 
+def print_summary(repos, filtered):
+    print("Total repositories:", len(repos))
+    print("Repositories after filtering:", len(filtered))
+
+
 def simplify_repos(repos):
     simplified = []
 
@@ -109,6 +114,8 @@ def main():
         config["min_stars"],
         config["language"]
     )
+
+    print_summary(repos, filtered)
 
     simplified = simplify_repos(filtered)
 
