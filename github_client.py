@@ -63,6 +63,21 @@ def calculate_average_stars(filtered):
     return total_stars / len(filtered)
 
 
+def create_report(config, repos, filtered):
+    average_stars = calculate_average_stars(filtered)
+
+    report = (
+        "GitHub Repository Report\n"
+        f"User: {config['username']}\n"
+        f"Total repositories: {len(repos)}\n"
+        f"Filtered repositories: {len(filtered)}\n"
+        f"Average stars: {average_stars}\n"
+        f"Language filter: {config['language']}"
+    )
+
+    return report
+
+
 def simplify_repos(repos):
     simplified = []
 
@@ -127,9 +142,8 @@ def main():
         config["language"]
     )
 
-    print_summary(repos, filtered)
-    average_stars = calculate_average_stars(filtered)
-    print("Average stars:", average_stars)
+    report = create_report(config, repos, filtered)
+    print(report)
 
     simplified = simplify_repos(filtered)
 
