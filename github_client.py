@@ -63,6 +63,19 @@ def calculate_average_stars(filtered):
     return total_stars / len(filtered)
 
 
+def get_top_repo(filtered):
+    if len(filtered) == 0:
+        return None
+
+    top_repo = filtered[0]
+
+    for repo in filtered[1:]:
+        if repo["stargazers_count"] > top_repo["stargazers_count"]:
+            top_repo = repo
+
+    return top_repo
+
+
 def create_report(config, repos, filtered):
     average_stars = calculate_average_stars(filtered)
 
