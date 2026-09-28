@@ -1,7 +1,13 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
-from github_client import calculate_average_stars, create_report, get_repos, get_top_repo
+import github_client
+from github_client import (
+    calculate_average_stars,
+    create_report,
+    get_repos,
+    get_top_repo,
+)
 
 
 class TestCalculateAverageStars(unittest.TestCase):
@@ -71,24 +77,36 @@ class TestGetTopRepo(unittest.TestCase):
     def test_get_top_repo_for_empty_list(self):
         result = get_top_repo([])
 
-        self.assertIsNone(result)        
-
+        self.assertIsNone(result)
 
 class TestGetRepos(unittest.TestCase):
     @patch("github_client.requests.get")
     def test_get_repos_returns_fake_data(self, mock_get):
         fake_data = [
-            {"name": "Hello-World", "stargazers_count": 100}
+            {"name": "repo-a"},
+            {"name": "repo-b"},
         ]
 
-        fake_response = mock_get.return_value
-        fake_response.json.return_value = fake_data
-        fake_response.raise_for_status.return_value = None
+        mock_response = unittest.mock.Mock()
+        mock_response.json.return_value = fake_data
+        mock_response.raise_for_status.return_value = None
+
+        mock_get.return_value = mock_response
 
         result = get_repos("octocat")
 
         self.assertEqual(result, fake_data)
         mock_get.assert_called_once()
+
+    @patch("github_client.requests.get")
+    def test_get_repos_returns_none_for_request_exception(self, mock_get):
+        mock_get.side_effect = github_client.requests.RequestException(
+            "Network error"
+        )
+
+        result = get_repos("octocat")
+
+        self.assertIsNone(result)
 
 
 if __name__ == "__main__":
