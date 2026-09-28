@@ -1,6 +1,6 @@
 import unittest
 
-from github_client import calculate_average_stars, create_report
+from github_client import calculate_average_stars, create_report, get_top_repo
 
 
 class TestCalculateAverageStars(unittest.TestCase):
@@ -49,6 +49,28 @@ class TestCreateReport(unittest.TestCase):
         )
 
         self.assertEqual(result, expected)
+
+class TestGetTopRepo(unittest.TestCase):
+    def test_get_top_repo(self):
+        filtered = [
+            {"name": "repo-a", "stargazers_count": 100},
+            {"name": "repo-b", "stargazers_count": 500},
+            {"name": "repo-c", "stargazers_count": 300}
+        ]
+
+        result = get_top_repo(filtered)
+
+        expected = {
+            "name": "repo-b",
+            "stargazers_count": 500
+        }
+
+        self.assertEqual(result, expected)
+
+    def test_get_top_repo_for_empty_list(self):
+        result = get_top_repo([])
+
+        self.assertIsNone(result)        
 
 
 if __name__ == "__main__":
