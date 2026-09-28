@@ -1,6 +1,7 @@
 import unittest
+from unittest.mock import patch
 
-from github_client import calculate_average_stars, create_report, get_top_repo
+from github_client import calculate_average_stars, create_report, get_repos, get_top_repo
 
 
 class TestCalculateAverageStars(unittest.TestCase):
@@ -71,6 +72,23 @@ class TestGetTopRepo(unittest.TestCase):
         result = get_top_repo([])
 
         self.assertIsNone(result)        
+
+
+class TestGetRepos(unittest.TestCase):
+    @patch("github_client.requests.get")
+    def test_get_repos_returns_fake_data(self, mock_get):
+        fake_data = [
+            {"name": "Hello-World", "stargazers_count": 100}
+        ]
+
+        fake_response = mock_get.return_value
+        fake_response.json.return_value = fake_data
+        fake_response.raise_for_status.return_value = None
+
+        result = get_repos("octocat")
+
+        self.assertEqual(result, fake_data)
+        mock_get.assert_called_once()
 
 
 if __name__ == "__main__":
